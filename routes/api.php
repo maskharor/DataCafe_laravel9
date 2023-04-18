@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\http\Controllers\MenuController;
 use App\http\Controllers\MejaController;
+use App\http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  Route::post('/createmeja',[MejaController::class, 'createmeja']);
  Route::put('/updatemeja/{id}',[MejaController::class, 'updatemeja']);
  Route::delete('/deletemeja/{id}',[MejaController::class, 'deletemeja']);
+ 
+ // making route for table meja
+ Route::get('/getuser',[UserController::class, 'getuser']);
+ Route::get('/getuser/{id}',[UserController::class, 'getuserid']);
+ Route::post('/createuser',[UserController::class, 'createuser']);
+ Route::put('/updateuser/{id}',[UserController::class, 'updateuser']);
+ Route::delete('/deleteuser/{id}',[UserController::class, 'deleteuser']);
