@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 use App\Models\menu;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class MenuController extends Controller
@@ -19,22 +22,27 @@ class MenuController extends Controller
         return response()->json($dt_menu);
     }
     public function createmenu(Request $req){
+        // dd($req->all());
         $validator = validator::make($req->all(),[
             'nama_menu'=>'required',
             'type'=>'required',
             'desc'=>'required',
-            'gambar'=>'required',
             'price'=>'required',
+            'gambar'=>'required|file',
         ]);
         if($validator->fails()){
             return Response()->json($validator->errors()->toJson());
         }
-        $save=menu::create([
+
+        $gambar = time() . '.' . $req->gambar->extension();
+        $req->gambar->move(public_path('images'), $gambar);
+
+        $save=DB::table('menus')->insert([
             'nama_menu' =>$req->get('nama_menu'),
             'type' =>$req->get('type'),
             'desc' =>$req->get('desc'),
-            'gambar' =>$req->get('gambar'),
             'price' =>$req->get('price'),
+            'gambar'=>$gambar,
         ]);
         if($save){
             return Response()->json([
@@ -58,12 +66,15 @@ class MenuController extends Controller
         if($validator->fails()){
             return Response()->json($validator->errors()->tojson()); 
         }
+        $gambar = time() . '.' . $req->gambar->extension();
+        $req->gambar->move(public_path('images'), $gambar);
+        
         $ubah=menu::where('id_menu', $id)->update([
             'nama_menu' =>$req->get('nama_menu'),
             'type' =>$req->get('type'),
             'desc' =>$req->get('desc'),
-            'gambar' =>$req->get('gambar'),
-            'price' =>$req->get('price')
+            'price' =>$req->get('price'),
+            'gambar' ->$gambar             
         ]);
         if($ubah){
             return Response()->json([
@@ -76,6 +87,22 @@ class MenuController extends Controller
             ]);
         }
     }
+    
+    public function updatephoto(Request $req, $id)
+    {
+        $gambar = time() . '.' . $req->gambar->extension();
+        $req->foto->move(public_path('images'), $gambar);
+
+        $update =  Menu::where('id_menu', $id)->update([
+            'foto' => $gambar
+        ]);
+
+        return response()->json([
+            "Message" => "Berhasil",
+            "Result" => $update
+        ]);
+    }
+
     public function deletemenu($id){
         $hapus=menu::where('id_menu', $id)->delete();
         if($hapus){

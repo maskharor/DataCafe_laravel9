@@ -11,6 +11,6 @@ class meja extends Model
     public $timestamps=null;
     protected $table="mejas";
     protected $primarykey="id_meja";
-    protected $fillable=['nomor_meja'];
+    protected $fillable=['nomor_meja', 'status'];
 
 }

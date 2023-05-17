@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string("nama_menu");
             $table->enum("type",['makanan', 'minuman']);
             $table->string("desc");
-            $table->binary("gambar");
             $table->integer("price");
             $table->timestamps();
         });

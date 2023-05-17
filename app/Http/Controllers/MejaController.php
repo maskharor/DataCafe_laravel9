@@ -28,6 +28,7 @@ class MejaController extends Controller
         }
         $save=meja::create([
             'nomor_meja' =>$req->get('nomor_meja'),
+            'status' =>'kosong',
         ]);
         if($save){
             return Response()->json([
@@ -43,12 +44,14 @@ class MejaController extends Controller
     public function updatemeja(Request $req, $id){
         $validator = validator::make($req->all(),[
             'nomor_meja'=>'required',
+            'status'=>'required',
         ]);
         if($validator->fails()){
             return Response()->json($validator->errors()->tojson()); 
         }
         $ubah=meja::where('id_meja', $id)->update([
             'nomor_meja' =>$req->get('nomor_meja'),
+            'status' =>$req->get('status'),
         ]);
         if($ubah){
             return Response()->json([
