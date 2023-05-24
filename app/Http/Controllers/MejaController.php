@@ -14,11 +14,19 @@ class MejaController extends Controller
         $dt_meja=meja::get();
         return response()->json($dt_meja);
     }
+    
+    public function getmejakosong(){
+        $sts_meja=meja::where('status', 'kosong')
+        ->get();
+        return response()->json($sts_meja);
+    }
+
     public function getmejaid(Request $req, $id){
         $dt_meja=meja::where('id_meja', $id)
         ->get();
         return response()->json($dt_meja);
     }
+
     public function createmeja(Request $req){
         $validator = validator::make($req->all(),[
             'nomor_meja'=>'required',

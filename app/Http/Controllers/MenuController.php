@@ -88,13 +88,13 @@ class MenuController extends Controller
         }
     }
     
-    public function updatephoto(Request $req, $id)
+    public function updategambar(Request $req, $id)
     {
         $gambar = time() . '.' . $req->gambar->extension();
-        $req->foto->move(public_path('images'), $gambar);
+        $req->gambar->move(public_path('images'), $gambar);
 
         $update =  Menu::where('id_menu', $id)->update([
-            'foto' => $gambar
+            'gambar' => $gambar
         ]);
 
         return response()->json([

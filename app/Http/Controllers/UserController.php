@@ -5,11 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\petugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class UserController extends Controller
 {
+    public function login(Request $request)
+    {
+        $token = Str::random(10);
+
+        $petugas = petugas::where('username', $request->input('username'))->first();
+
+        if (!$petugas || !Hash::check($request->input('password'), $petugas->password)) {
+            return response()->json(['message' => 'Password mu salah oi'], 401);
+        }
+
+
+        $role = $petugas->role;
+
+        return response()->json(compact('token', 'role'));
+    }
     public function getuser(){
         $dt_user=petugas::get();
         return response()->json($dt_user);
@@ -19,6 +35,13 @@ class UserController extends Controller
         ->get();
         return response()->json($dt_user);
     }
+    public function getkasir()
+    {
+        $kasir = petugas::where('role','kasir')
+        ->get();
+        return response()->json($kasir);
+    }
+
     public function createuser(Request $req){
         $validator = validator::make($req->all(),[
             'nama_petugas'=>'required',
@@ -33,7 +56,7 @@ class UserController extends Controller
             'nama_petugas' =>$req->get('nama_petugas'),
             'username' =>$req->get('username'),
             'role' =>$req->get('role'),
-            'password' =>$req->get('password'),
+            'password' =>Hash::make($req->get('password')),
         ]);
         if($save){
             return Response()->json([
