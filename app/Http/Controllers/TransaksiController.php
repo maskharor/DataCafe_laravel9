@@ -135,10 +135,9 @@ class TransaksiController extends Controller
     public function checkout(Request $req){
         $id_keranjang = Str::random(5);
 
-        $id_user =$req->input('id_user');
         $checkout = transaksi::where('id_keranjang', null)->update([
             'id_keranjang' => $id_keranjang,
-            'id_user' => $id_user,
+            'id_user' => $req->input('id_user'),
             'id_meja' =>$req->input('id_meja'),
             'nama_pelanggan' => $req->input('nama_pelanggan')
         ]);

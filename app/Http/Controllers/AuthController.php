@@ -24,7 +24,9 @@ class AuthController extends Controller
 
 
         $role = $user->role;
+        $username = $user->username;
+        $id_user = $user->id_user;
 
-        return response()->json(compact('token', 'role'));
+        return response()->json(compact('token', 'role',  'username', 'id_user'));
     }
 }

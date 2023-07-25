@@ -83,7 +83,7 @@ class UserController extends Controller
             'nama_petugas' =>$req->get('nama_petugas'),
             'username' =>$req->get('username'),
             'role' =>$req->get('role'),
-            'password' =>$req->get('password'),
+            'password' =>Hash::make($req->get('password')),
         ]);
         if($ubah){
             return Response()->json([
